@@ -9,6 +9,9 @@ pb "github.com/hyperledger/fabric/protos/peer"
 )
 
 type HospitalChainCode struct {
+	Uid string `"json: user_id"`
+	ExpenseList map[string]string
+
 }
 
 func (t *HospitalChainCode) Init(stub shim.ChaincodeStubInterface) pb.Response {
