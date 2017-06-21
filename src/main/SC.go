@@ -1,6 +1,10 @@
 package main
 
 import (
- _ "fmt"
+ "fmt"
 )
+
+func main() {
+ fmt.Printf("this is a sample!")
+}
 
