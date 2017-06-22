@@ -50,7 +50,6 @@ func (t *HospitalChainCode) invoke(stub shim.ChaincodeStubInterface, args []stri
 	}
 
 	jsonVal := args[0]
-
 	var jsonObj ExpenseDetail
 	err := json.Unmarshal([]byte(jsonVal), &jsonObj)
 	if err != nil {
@@ -84,7 +83,6 @@ func (t *HospitalChainCode) query(stub shim.ChaincodeStubInterface, args []strin
 	}
 
 	uid := args[0]
-
 	usrMapdataBytes, err := stub.GetState(uid)
 	if err != nil {
 		return shim.Success([]byte(uid))
