@@ -63,7 +63,7 @@ func (t *HospitalChainCode) invoke(stub shim.ChaincodeStubInterface, args []stri
 	// usrMapdataBytes is []byte
 	usrMapdataBytes, err := stub.GetState(jsonObj.Uid)
 	// map is not found
-	if err == nil {
+	if len(usrMapdataBytes) != 0 {
 		jsonErr := json.Unmarshal(usrMapdataBytes, usrMapdata)
 		if jsonErr != nil {
 			return shim.Error("Failed to Unmarshal!")
@@ -96,13 +96,7 @@ func (t *HospitalChainCode) query(stub shim.ChaincodeStubInterface, args []strin
 		return shim.Success([]byte("Data is null!"))
 	}
 
-	usrMapdata := map[string]ExpenseDetail{}
-	jsonData,err := json.Marshal(usrMapdata)
-	if err != nil {
-		return shim.Error("Fail to Marshal!")
-	}
-
-	return shim.Success(jsonData)
+	return shim.Success(usrMapdataBytes)
 }
 
 func main() {
