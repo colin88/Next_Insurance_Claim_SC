@@ -34,6 +34,8 @@ func (t *HospitalChainCode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	return shim.Success(nil)
 }
 
+// {"uid":"3702821982","expenseTime":"20001010010203","claimed":false,"medicines":[{"id":"1000","name":"med1000","price":10,
+// "number":10},{"id":"2000","name":"med2000","price":20,"number":10},{"id":"3000","name":"med3000","price":30,"number":10}]}
 func (t *HospitalChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
 	if function == "invoke" {
