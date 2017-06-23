@@ -26,5 +26,4 @@ func TestHospitalChainCode_Invoke(t *testing.T) {
 	fmt.Printf("Query payload is %s", string(queryRes.Payload))
 
 
-
 }

@@ -3,12 +3,12 @@ package main
 import (
 "fmt"
 _ "strconv"
-	_ "encoding/json"
+_ "encoding/json"
 "github.com/hyperledger/fabric/core/chaincode/shim"
 pb "github.com/hyperledger/fabric/protos/peer"
 	"encoding/json"
-	"encoding/binary"
-	"bytes"
+	_"encoding/binary"
+	_"bytes"
 )
 
 type MedicineDetail struct {
@@ -64,27 +64,24 @@ func (t *HospitalChainCode) invoke(stub shim.ChaincodeStubInterface, args []stri
 	usrMapdataBytes, err := stub.GetState(jsonObj.Uid)
 	// map is not found
 	if err == nil {
-		buf := new(bytes.Buffer)
-		buf.Write(usrMapdataBytes)
-		binary.Read(buf, binary.BigEndian, usrMapdata)
+		jsonErr := json.Unmarshal(usrMapdataBytes, usrMapdata)
+		if jsonErr != nil {
+			return shim.Error("Failed to Unmarshal!")
+		}
 }
 	usrMapdata[jsonObj.ExpenseTime] = jsonObj
 
-	buf := new(bytes.Buffer)
-	binary.Write(buf, binary.BigEndian, usrMapdata)
-
-	stub.PutState(jsonObj.Uid,[]byte("bizhenchaoTest"))
-	//stub.PutState(jsonObj.Uid, buf.Bytes())
-
-/////////////////////////
-	usrMapdataBytes22, err := stub.GetState(jsonObj.Uid)
-	if err != nil {
-		return shim.Success([]byte(jsonObj.Uid))
+	userMapJson, err := json.Marshal(usrMapdata)
+	if  err != nil {
+		return shim.Error("Failed to Marshal!")
 	}
 
-	fmt.Printf("JSON data is %s", string(usrMapdataBytes22))
+	//buf := new(bytes.Buffer)
+	//binary.Write(buf, binary.BigEndian, usrMapdata)
 
-	return shim.Success(nil)
+	stub.PutState(jsonObj.Uid, userMapJson)
+
+	return shim.Success([]byte("success!"))
 }
 
 func (t *HospitalChainCode) query(stub shim.ChaincodeStubInterface, args []string) pb.Response {
@@ -96,14 +93,10 @@ func (t *HospitalChainCode) query(stub shim.ChaincodeStubInterface, args []strin
 	uid := args[0]
 	usrMapdataBytes, err := stub.GetState(uid)
 	if err != nil {
-		return shim.Success([]byte(uid))
+		return shim.Success([]byte("Data is null!"))
 	}
 
 	usrMapdata := map[string]ExpenseDetail{}
-	buf := new(bytes.Buffer)
-	buf.Write(usrMapdataBytes)
-	binary.Read(buf, binary.BigEndian, usrMapdata)
-
 	jsonData,err := json.Marshal(usrMapdata)
 	if err != nil {
 		return shim.Error("Fail to Marshal!")
