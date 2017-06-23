@@ -15,9 +15,15 @@ func TestHospitalChainCode_Invoke(t *testing.T) {
 `
 	res := stub.MockInvoke("1", [][]byte{[]byte("invoke"), []byte(jsonVal)})
 	if res.Status != shim.OK {
-		fmt.Printf("Failed!!")
+		t.FailNow()
 	}
 
+	queryRes := stub.MockInvoke("2", [][]byte{[]byte("query"), []byte("3702821982")})
+	if queryRes.Status != shim.OK {
+		t.FailNow()
+	}
+
+	fmt.Printf("Query payload is %s", string(queryRes.Payload))
 
 
 }
