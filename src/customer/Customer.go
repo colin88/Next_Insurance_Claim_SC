@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bytes"
-	"encoding/binary"
+	_ "bytes"
+	_ "encoding/binary"
 	"fmt"
 	"github.com/hyperledger/fabric/common/util"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -64,7 +64,7 @@ func (t *CustomerChainCode) invoke(stub shim.ChaincodeStubInterface, args []stri
 	channelID := args[1]
 	userID := args[2]
 
-	//var  queryArgs  = [][]byte {[]byte("query"), []byte(t.UserID)}
+	//var  queryArgs  = [][]byte {[]byte("query"), []byte(t.UserID)}    ---This is another constuct arges methods
 	q := "query"
 	queryArgs := util.ToChaincodeArgs(q, userID)
 	response := stub.InvokeChaincode(chainCodeToCall, queryArgs, channelID)
@@ -73,12 +73,17 @@ func (t *CustomerChainCode) invoke(stub shim.ChaincodeStubInterface, args []stri
 	usrMapdataBytes := response.GetPayload()
 
 	var usrMapdata map[string]ExpenseDetail
+
 	if usrMapdataBytes != nil {
 		logger.Info("*********Invoke Hospital CC from Customer CC result: ", string(usrMapdataBytes))
-		buf := new(bytes.Buffer)
-		buf.Write(usrMapdataBytes)
-		binary.Read(buf, binary.BigEndian, usrMapdata)
+		//fmt.Println("--------$$$$$$$$: ", string(usrMapdataBytes))
+		err := json.Unmarshal(usrMapdataBytes, &usrMapdata)
+		if err != nil {
+			return shim.Error("Fail to unmarshal json data!")
+		}
+
 	}
+
 	//var jsonObj ExpenseDetail
 	var totalExpAm float64
 	for _, expense := range usrMapdata {

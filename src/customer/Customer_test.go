@@ -31,7 +31,7 @@ func TestCustomerChainCode_Init(t *testing.T) {//stub *shim.MockStub, args [][]b
 	args := util.ToChaincodeArgs(f, chaincodeToInvoke, "", "3702821982")
 	res = stub.MockInvoke("01", args)
 	if res.Status != shim.OK {
-		fmt.Println("------Invoker Hospital info failed", string(res.Message))
+		fmt.Println("Invoker Hospital info failed", string(res.Message))
 		t.FailNow()
 	}
 
