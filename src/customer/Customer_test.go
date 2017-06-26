@@ -28,4 +28,14 @@ func TestCustomerChainCode_Init(t *testing.T) {//stub *shim.MockStub, args [][]b
 		t.FailNow()
 	}
 
+	q := "query"
+	conId := "3702821982"
+
+	args1 := util.ToChaincodeArgs(q, conId)
+	queryRes := stub.MockInvoke("02", args1)
+	if queryRes.Status != shim.OK {
+		t.FailNow()
+	}
+	fmt.Printf("Query payload is %s", string(queryRes.Payload))
+
 }

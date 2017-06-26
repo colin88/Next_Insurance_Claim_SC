@@ -84,7 +84,7 @@ func (t *CustomerChainCode) invoke(stub shim.ChaincodeStubInterface, args []stri
 	for _, expense := range usrMapdata {
 		//expense = usrMapdata[expTime]
 		for i := 0; i < len(expense.Medicines); i++ {
-			totalExpAm += float64(expense.Medicines[i].Price * 0.8)
+			totalExpAm += float64( float64(expense.Medicines[i].Price) * 0.8)
 		}
 	}
 
@@ -101,7 +101,8 @@ func (t *CustomerChainCode) invoke(stub shim.ChaincodeStubInterface, args []stri
 
 	// Write the state to the ledger
 	err = stub.PutState(userID, []byte(custJson))
-	//stub.InvokeChaincode("", );
+	testBytes, err := stub.GetState(userID)
+	fmt.Println("******* Put Value: ", string(testBytes))
 	if err != nil {
 		return shim.Error(err.Error())
 	}
