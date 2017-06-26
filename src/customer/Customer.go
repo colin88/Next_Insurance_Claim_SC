@@ -45,7 +45,7 @@ func (t *CustomerChainCode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 }
 
 //private methohd
-func (t *CustomerChainCode) Invoke(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *CustomerChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
 	if function == "invoke" {
 		return t.invoke(stub, args)
