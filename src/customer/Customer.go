@@ -41,7 +41,32 @@ type CustomerDetail struct {
 }
 
 func (t *CustomerChainCode) Init(stub shim.ChaincodeStubInterface) pb.Response {
-	return shim.Success(nil)
+	_, args := stub.GetFunctionAndParameters()
+
+	var err error
+
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+
+	var cusObj CustomerDetail
+	var content string = args[0] //{"UserID":"3702821982","Status":"initialized","Claimed":false,"Amount":0}
+	err = json.Unmarshal([]byte(content), &cusObj)
+	if err != nil {
+		return shim.Error("Fail to unmarshal json data!")
+	}
+
+
+	cusJson, err := json.Marshal(cusObj)
+	if  err != nil {
+		return shim.Error("Failed to Marshal!")
+	}
+	err = stub.PutState(cusObj.UserID, cusJson)
+
+	testBytes, err := stub.GetState(cusObj.UserID)
+	fmt.Println("******* Initial Customer: ", string(testBytes))
+
+	return shim.Success([]byte("success!"))
 }
 
 //private methohd
@@ -106,8 +131,8 @@ func (t *CustomerChainCode) invoke(stub shim.ChaincodeStubInterface, args []stri
 
 	// Write the state to the ledger
 	err = stub.PutState(userID, []byte(custJson))
-	testBytes, err := stub.GetState(userID)
-	fmt.Println("******* Put Value: ", string(testBytes))
+	//testBytes, err := stub.GetState(userID)
+	//fmt.Println("******* Put Value: ", string(testBytes))
 	if err != nil {
 		return shim.Error(err.Error())
 	}
