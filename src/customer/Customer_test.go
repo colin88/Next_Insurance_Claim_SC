@@ -18,11 +18,18 @@ func TestCustomerChainCode_Init(t *testing.T) {//stub *shim.MockStub, args [][]b
 	cc2 := new(hosp.HospitalChainCode)
 	stubExec2 := shim.NewMockStub(chaincodeToInvoke, cc2)
 
+	jsonVal := `{"uid":"3702821982","expenseTime":"20001010010203","claimed":false,"medicines":[{"name":"med1000","id":"1000","number":10,"price":10},{"name":"med2000","id":"2000","number":10,"price":20},{"name":"med3000","id":"3000","number":10,"price":30}]}
+`
+	res := stubExec2.MockInvoke("1", [][]byte{[]byte("invoke"), []byte(jsonVal)})
+	if res.Status != shim.OK {
+		t.FailNow()
+	}
+
 	stub.MockPeerChaincode(chaincodeToInvoke, stubExec2)
 
 	f := "invoke"
 	args := util.ToChaincodeArgs(f, chaincodeToInvoke, "", "3702821982")
-	res := stub.MockInvoke("01", args)
+	res = stub.MockInvoke("01", args)
 	if res.Status != shim.OK {
 		fmt.Println("------Invoker Hospital info failed", string(res.Message))
 		t.FailNow()
