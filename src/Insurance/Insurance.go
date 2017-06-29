@@ -94,12 +94,8 @@ func (t*InsuranceChainCode) query(stub shim.ChaincodeStubInterface, args []strin
 		jsonResp := "{\"Error\":\"Failed to get state for " + userID + "\"}"
 		return shim.Error(jsonResp)
 	}
-	//if Contentbytes == nil {
-	//	jsonResp := "{\"Error\":\"Nil amount for " + userID + "\"}"
-	//	return shim.Error(jsonResp)
-	//}
 
-	jsonResp := string(Contentbytes)
+	jsonResp := string(Contentbytes)//{"3702821982":{"UserID":"3702821982","Policies":[{"ID":"new20170012","ExpenseRate":"0.8","Amount":0}]}}
 	fmt.Printf("Query Response:%s\n", jsonResp)
 	return shim.Success(Contentbytes)
 }
