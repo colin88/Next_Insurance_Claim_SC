@@ -8,7 +8,7 @@ import (
 )
 
 
-func TestInsuranceChainCode_InitheckInit(t *testing.T) {//stub *shim.MockStub, args [][]byte
+func TestInsuranceChainCode_Init(t *testing.T) {//stub *shim.MockStub, args [][]byte
 	scc := new(InsuranceChainCode)
 	stub := shim.NewMockStub("test1", scc)
 	f := "init"
